@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Guests List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-100">
+<div class="flex">
+    <!-- SIDEBAR -->
+    <aside class="w-64 min-h-screen bg-white shadow-sm border-r flex flex-col">
+        <div class="px-6 py-4 font-semibold text-xl flex items-center gap-2">
+            <span class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">F</span>
+            Fixoria™
+        </div>
+        <div class="px-6 py-2 text-xs text-gray-500 flex items-center gap-2 bg-gray-50 rounded-lg mb-2">
+            <span class="material-icons text-success">location_on</span>
+            Grand Sylhet Hotel
+            <span class="badge badge-success badge-xs ml-2">3 Staff Added</span>
+        </div>
+        <nav class="mt-2 space-y-1 px-4 flex-1">
+            <div class="text-xs text-gray-400 uppercase mb-1">Daily Operation</div>
+            <a class="flex items-center gap-2 py-2 rounded-lg hover:bg-gray-100 transition-all">
+                <span class="material-icons text-base-content/60">dashboard</span> Dashboard
+            </a>
+            <a class="flex items-center gap-2 py-2 rounded-lg hover:bg-gray-100 transition-all">
+                <span class="material-icons text-base-content/60">event</span> Reservation
+            </a>
+            <a class="flex items-center gap-2 py-2 rounded-lg hover:bg-gray-100 transition-all">
+                <span class="material-icons text-base-content/60">hotel</span> Room Operation
+            </a>
+            <div class="pt-3 text-xs text-gray-400 uppercase mb-1">Manage Staff</div>
+            <a class="flex items-center gap-2 py-2 rounded-lg hover:bg-gray-100 transition-all">
+                <span class="material-icons text-base-content/60">group</span> Manage Guests
+            </a>
+            <a class="flex items-center gap-2 py-2 rounded-lg bg-gray-100 font-medium text-primary transition-all">
+                <span class="material-icons text-primary">list</span> Guests List
+            </a>
+            <a class="flex items-center gap-2 py-2 rounded-lg hover:bg-gray-100 transition-all">
+                <span class="material-icons text-base-content/60">star</span> Guests Reviews
+            </a>
+            <div class="pt-3 text-xs text-gray-400 uppercase mb-1">Accounting</div>
+            <a class="flex items-center gap-2 py-2 rounded-lg hover:bg-gray-100 transition-all">
+                <span class="material-icons text-base-content/60">local_offer</span> Promotions
+            </a>
+            <div class="pt-3 text-xs text-gray-400 uppercase mb-1">System Options</div>
+            <a class="flex items-center gap-2 py-2 rounded-lg hover:bg-gray-100 transition-all">
+                <span class="material-icons text-base-content/60">settings</span> Settings
+            </a>
+        </nav>
+        <div class="px-6 py-4 border-t text-xs text-gray-400 flex items-center gap-2">
+            <span class="material-icons">support_agent</span> Help & Support
+        </div>
+        <div class="px-6 py-2 flex items-center gap-2">
+            <span class="material-icons text-gray-400">dark_mode</span>
+            <label class="cursor-pointer label">
+                <span class="label-text">Darkmode</span>
+                <input type="checkbox" class="toggle toggle-sm ml-2" />
+            </label>
+        </div>
+        <div class="px-6 py-4 border-t text-xs text-gray-400 flex items-center gap-2">
+            <span class="material-icons">logout</span> Log Out
+        </div>
+    </aside>
+    <!-- MAIN CONTENT -->
+    <div class="flex-1 p-6">
+        <!-- HEADER -->
+        <div class="flex items-center justify-between mb-2">
+            <div>
+                <div class="text-sm breadcrumbs">
+                    <ul>
+                        <li>Manage Guests</li>
+                        <li class="font-semibold">Guests List</li>
+                    </ul>
+                </div>
+                <div class="flex items-center gap-2 mt-1">
+                    <div class="avatar placeholder">
+                        <div class="bg-neutral-focus text-neutral-content rounded-full w-8">
+                            <span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg></span>
+                        </div>
+                    </div>
+                    <h1 class="text-2xl font-bold">Guests List</h1>
+                </div>
+                <p class="text-xs text-gray-500">Auto-updates in 2 min</p>
+            </div>
+            <label for="add-guest-modal" class="btn btn-success gap-2">
+                ➕ Add New Guests
+            </label>
+        </div>
+        <!-- FILTER ROW -->
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+            <select class="select select-bordered select-sm w-32">
+                <option>All Staff</option>
+                <option>Front Desk</option>
+                <option>Web</option>
+            </select>
+            <select class="select select-bordered select-sm w-32">
+                <option>Status</option>
+                <option>Paid</option>
+                <option>Pending</option>
+            </select>
+            <select class="select select-bordered select-sm w-32">
+                <option>Monthly</option>
+                <option>Weekly</option>
+            </select>
+            <label class="input input-bordered flex items-center gap-2 w-72 ml-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" class="grow" placeholder="Search..." />
+            </label>
+            <button class="btn btn-outline btn-sm">Export PDF</button>
+            <button class="btn btn-outline btn-sm">Export Excel</button>
+        </div>
+        <!-- TABLE -->
+        <div class="mt-6 bg-white rounded-xl shadow-sm p-4 border">
+            <table class="table table-zebra">
+                <thead class="text-gray-500">
+                    <tr>
+                        <th><input type="checkbox" class="checkbox checkbox-sm" /></th>
+                        <th>Booking No</th>
+                        <th>Name of Guest</th>
+                        <th>Source</th>
+                        <th>Date</th>
+                        <th>Email</th>
+                        <th>Mobile Number</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- SAMPLE ROW -->
+                    <tr>
+                        <td><input type="checkbox" class="checkbox checkbox-sm"></td>
+                        <td>#102112</td>
+                        <td>Raiders Kae</td>
+                        <td>Font Desks</td>
+                        <td>20/12/2024</td>
+                        <td>debra.hl@gmail.com</td>
+                        <td>+88 01766703570</td>
+                        <td>$1400.00</td>
+                        <td>
+                            <span class="badge badge-success gap-2">Cash - Paid</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-ghost btn-xs">⋮</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="checkbox checkbox-sm"></td>
+                        <td>#102111</td>
+                        <td>Jasey Mac</td>
+                        <td>Web Reservation</td>
+                        <td>19/12/2024</td>
+                        <td>mark@gmail.com</td>
+                        <td>+88 01766703578</td>
+                        <td>$400.00</td>
+                        <td>
+                            <span class="badge badge-success">Cash - Paid</span>
+                        </td>
+                        <td><button class="btn btn-ghost btn-xs">⋮</button></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="checkbox checkbox-sm"></td>
+                        <td>#102110</td>
+                        <td>Macculam Brad</td>
+                        <td>Font Desks</td>
+                        <td>18/12/2024</td>
+                        <td>brad@gmail.com</td>
+                        <td>+88 01766703570</td>
+                        <td>$9800.00</td>
+                        <td>
+                            <span class="badge badge-warning text-white">Pending</span>
+                        </td>
+                        <td><button class="btn btn-ghost btn-xs">⋮</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- PAGINATION -->
+            <div class="mt-6 flex justify-between items-center">
+                <button class="btn btn-sm">Previous</button>
+                <div class="join">
+                    <button class="join-item btn btn-sm btn-active">1</button>
+                    <button class="join-item btn btn-sm">2</button>
+                    <button class="join-item btn btn-sm">3</button>
+                </div>
+                <button class="btn btn-sm">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add New Guest Modal -->
+<input type="checkbox" id="add-guest-modal" class="modal-toggle" />
+<div class="modal">
+    <div class="modal-box w-full max-w-lg">
+        <h3 class="font-bold text-lg mb-4">Add New Guest</h3>
+        <form>
+            <div class="form-control mb-3">
+                <label class="label">
+                    <span class="label-text">Name of Guest</span>
+                </label>
+                <input type="text" class="input input-bordered w-full" placeholder="Enter guest name" />
+            </div>
+            <div class="form-control mb-3">
+                <label class="label">
+                    <span class="label-text">Email</span>
+                </label>
+                <input type="email" class="input input-bordered w-full" placeholder="Enter email" />
+            </div>
+            <div class="form-control mb-3">
+                <label class="label">
+                    <span class="label-text">Mobile Number</span>
+                </label>
+                <input type="text" class="input input-bordered w-full" placeholder="Enter mobile number" />
+            </div>
+            <div class="form-control mb-3">
+                <label class="label">
+                    <span class="label-text">Source</span>
+                </label>
+                <select class="select select-bordered w-full">
+                    <option>Front Desk</option>
+                    <option>Web Reservation</option>
+                    <option>Group Reservation</option>
+                </select>
+            </div>
+            <div class="form-control mb-3">
+                <label class="label">
+                    <span class="label-text">Amount</span>
+                </label>
+                <input type="number" class="input input-bordered w-full" placeholder="Enter amount" />
+            </div>
+            <div class="modal-action">
+                <label for="add-guest-modal" class="btn btn-ghost">Cancel</label>
+                <button type="submit" class="btn btn-primary">Add Guest</button>
+            </div>
+        </form>
+    </div>
+    <label class="modal-backdrop" for="add-guest-modal"></label>
+</div>
+</body>
+</html>

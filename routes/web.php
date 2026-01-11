@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\hotspot\PaymentController;
 use App\Http\Controllers\RadiusController;
 use App\Http\Controllers\RadiusUserController;
 use App\Livewire\CustomersComponent;
@@ -21,6 +22,14 @@ use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Facades\Auth;
 use Livewire\Livewire;
+
+// Public payment routes
+Route::get('/payment', [PaymentController::class, 'showPaymentPage'])->name('paymenthp.form');
+Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('paymenthp.process');
+Route::get('/payment/callback', [PaymentController::class, 'handleCallback'])->name('paymenthp.callback');
+Route::post('/payment/webhook', [PaymentController::class, 'webhook'])->name('paymenthp.webhook');
+Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('paymenthp.success');
+Route::get('/payment/failed', [PaymentController::class, 'paymentFailed'])->name('paymenthp.failed');
 
 // Public routes (no middleware)
 Route::get('/', function () {
@@ -128,7 +137,7 @@ Route::middleware(['auth'])->group(function () {
         });
 
         // Hotspot & General Routes
-        Route::get('/vouchers', VoucherManagerComponent::class)->name('vouchers');
+        Route::get('/vouchers', VoucherManagerComponent::class)->name('vouchers.index');
         Route::get('/reports', ReportsManagerComponent::class)->name('reports');
         Route::get('/settings', SettingsComponent::class)->name('settings');
         Route::get('/radius-server', RadiusComponent::class)->name('radius-server');
@@ -163,5 +172,7 @@ Route::middleware(['auth'])->group(function () {
                 ], 500);
             }
         })->name('radius.test');
+
+        Route::get('/test-mikrotik', [RadiusController::class, 'checkMikrotik'])->name('test.mikrotik');
     });
 });

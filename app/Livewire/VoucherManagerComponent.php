@@ -5,7 +5,7 @@ namespace App\Livewire;
 use App\Models\Product;
 use App\Models\Voucher;
 use App\Models\Tenant;
-
+use App\Services\MikrotikService;
 use Livewire\WithPagination;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -49,8 +49,8 @@ class VoucherManagerComponent extends Component
     public function generateVouchers()
     {
         $this->validate();
-
         $product = Product::findOrFail($this->product_id);
+        $mikrotik = new MikrotikService();
 
         if ($product->service_type !== 'hotspot') {
             session()->flash('error', 'Selected product is not for hotspot service.');
@@ -82,6 +82,14 @@ class VoucherManagerComponent extends Component
         }
 
         Voucher::insert($vouchers);
+
+         // Send to MikroTik
+        $mikrotik->createHotspotUser(
+            username: $code,
+            password: $code,
+            profile: $product->mikrotik_profile,   // Speed plan name on Mikrotik
+            limitUptime: $product->duration ?? null // "1h", "8h", "1d"
+        );
 
         session()->flash('message', "Generated {$this->quantity} vouchers successfully! Batch ID: {$batchId}");
         $this->showGenerateModal = false;
@@ -138,6 +146,6 @@ class VoucherManagerComponent extends Component
                 ->get(),
             'batchVouchers' => $batchVouchers
         ]);
-        return view('livewire.voucher-manager-component');
+        return view('livewire.voucher-manager');
     }
 }

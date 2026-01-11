@@ -12,8 +12,16 @@ class Customer extends Model
     protected $fillable = [
         'tenant_id',
         'name',
-        'email',
         'phone',
+        'email',
+        'total_spent',
+        'total_purchases',
+        'last_purchase'
+    ];
+
+    protected $casts = [
+        'total_spent' => 'decimal:2',
+        'last_purchase' => 'datetime',
     ];
 
     public function tenant()

@@ -3,78 +3,41 @@
 @endpush
 
 <!-- Dashboard Content -->
-<div class="space-y-6">
+<div class="space-y-6 p-6 bg-base-100 min-h-screen">
     <!-- Success Message -->
     @if (session()->has('message'))
-        <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-lg shadow-sm">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm font-medium text-green-800">
-                        {{ session('message') }}
-                    </p>
-                </div>
-                <div class="ml-auto pl-3">
-                    <div class="-mx-1.5 -my-1.5">
-                        <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove()" 
-                                class="inline-flex rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <div class="alert alert-success shadow-sm flex items-center">
+            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>{{ session('message') }}</span>
+            <button onclick="this.parentElement.remove()" class="ml-auto btn btn-xs btn-ghost">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
         </div>
     @endif
 
     <!-- Profile Incomplete Alert -->
     @if($showProfileIncompleteAlert && $currentTenant)
-    <div class="bg-orange-50 border-l-4 border-orange-400 p-4 rounded-lg shadow-sm">
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <svg class="h-5 w-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                </svg>
-            </div>
-            <div class="ml-3 flex-1">
-                <p class="text-sm font-medium text-orange-800">
-                    Complete Your Profile Setup
-                </p>
-                <div class="mt-2 text-sm text-orange-700">
-                    <p>Your company profile is incomplete. Complete your setup to unlock all features and get the most out of your billing system.</p>
-                </div>
-                <div class="mt-4">
-                    <div class="flex space-x-3">
-                        <button wire:click="completeProfile" 
-                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 rounded-lg transition-colors duration-200">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Complete Profile Setup
-                        </button>
-                        <button wire:click="dismissAlert" 
-                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-orange-700 bg-transparent hover:bg-orange-100 rounded-lg transition-colors duration-200">
-                            Don't show again
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="ml-auto pl-3">
-                <div class="-mx-1.5 -my-1.5">
-                    <button wire:click="dismissAlert" 
-                            class="inline-flex rounded-md p-1.5 text-orange-500 hover:bg-orange-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-orange-50 focus:ring-orange-600">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
+    <div class="alert alert-warning shadow-sm flex items-center">
+        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+        </svg>
+        <div class="flex-1">
+            <span class="font-semibold">Complete Your Profile Setup</span>
+            <div class="text-xs">Your company profile is incomplete. Complete your setup to unlock all features and get the most out of your billing system.</div>
+            <div class="mt-2 flex gap-2">
+                <button wire:click="completeProfile" class="btn btn-sm btn-warning">Complete Profile Setup</button>
+                <button wire:click="dismissAlert" class="btn btn-sm btn-ghost">Don't show again</button>
             </div>
         </div>
+        <button wire:click="dismissAlert" class="ml-auto btn btn-xs btn-ghost">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
     </div>
     @endif
 
@@ -88,25 +51,25 @@
                     <option value="{{ $tenant->id }}">{{ $tenant->name }}</option>
                 @endforeach
             </select>
-            
+
             <!-- User Menu -->
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="flex items-center space-x-2 text-gray-700 hover:text-gray-900">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Admin') }}" 
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Admin') }}"
                          class="w-10 h-10 rounded-full border" alt="User Avatar" />
                     <span class="hidden sm:block">{{ auth()->user()->name ?? 'Admin' }}</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
-                
-                <div x-show="open" @click.away="open = false" 
+
+                <div x-show="open" @click.away="open = false"
                      class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
                     <div class="px-4 py-2 text-sm text-gray-700 border-b">
                         <div class="font-medium">{{ auth()->user()->name ?? 'Admin' }}</div>
                         <div class="text-gray-500">{{ auth()->user()->email ?? '' }}</div>
                     </div>
-                    <button wire:click="logout" 
+                    <button wire:click="logout"
                             class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>

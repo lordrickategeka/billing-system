@@ -104,7 +104,7 @@
                 </div>
 
                 <!-- Hotspot Vouchers -->
-                <a href="{{ route('vouchers') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('vouchers') ? 'text-orange-600 bg-orange-50' : 'text-gray-700 hover:bg-gray-50 hover:text-orange-600' }} font-medium">
+                <a href="{{ route('vouchers.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('vouchers') ? 'text-orange-600 bg-orange-50' : 'text-gray-700 hover:bg-gray-50 hover:text-orange-600' }} font-medium">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a1 1 0 001 1h1a1 1 0 001-1V7a2 2 0 00-2-2H5zM5 21a2 2 0 002-2v-3a1 1 0 00-1-1H5a1 1 0 00-1 1v3a2 2 0 002 2h0zm0 0h14a2 2 0 002-2v-3a1 1 0 00-1-1h-1a1 1 0 00-1 1v3a2 2 0 01-2 2H5z"></path>
                     </svg>
