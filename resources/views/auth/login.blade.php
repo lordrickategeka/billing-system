@@ -21,7 +21,7 @@
                         </svg>
                     </div>
                     <div class="ml-3">
-                        <h1 class="text-2xl font-bold text-gray-900">BASH</h1>
+                        <h1 class="text-2xl font-bold text-gray-900">BILLIT</h1>
                         <p class="text-sm text-orange-500 font-medium">Digitalizing Tech</p>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                     <!-- Remember Me -->
                     <div class="flex items-center justify-between mt-6">
                         <div class="flex items-center">
-                            <input id="remember_me" name="remember" type="checkbox" 
+                            <input id="remember_me" name="remember" type="checkbox"
                                    class="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600">
                             <label for="remember_me" class="ml-3 block text-sm leading-6 text-gray-700">Remember me</label>
                         </div>
@@ -85,7 +85,7 @@
                     </div>
 
                     <div class="mt-6">
-                        <button type="submit" 
+                        <button type="submit"
                                 class="flex w-full justify-center rounded-md bg-orange-500 px-3 py-2.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 transition-colors">
                             Sign in
                         </button>
