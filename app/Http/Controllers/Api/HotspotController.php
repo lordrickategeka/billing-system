@@ -76,6 +76,9 @@ class HotspotController extends Controller
                 'start_at' => now(),
                 'end_at' => $voucher->product->term_days ?
                     now()->addDays($voucher->product->term_days) : null,
+                'expires_at' => $voucher->product->term_days ?
+                    now()->addDays($voucher->product->term_days) : null,
+                'data_remaining' => $voucher->product->quota_mb ? $voucher->product->quota_mb * 1024 * 1024 : null,
                 'status' => 'active',
                 'activated_at' => now()
             ]);

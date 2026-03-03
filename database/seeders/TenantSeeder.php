@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class TenantSeeder extends Seeder
 {
@@ -16,7 +15,9 @@ class TenantSeeder extends Seeder
     public function run(): void
     {
         // Create Default ISP Tenant (Main/Production)
-        $defaultTenant = Tenant::create([
+        $defaultTenant = Tenant::updateOrCreate([
+            'slug' => 'default-isp',
+        ], [
             'name' => 'Default ISP',
             'slug' => 'default-isp',
             'country' => 'UG',
@@ -69,7 +70,9 @@ class TenantSeeder extends Seeder
         ]);
 
         // Create admin user for default tenant
-        User::create([
+        User::updateOrCreate([
+            'email' => 'admin@defaultisp.ug',
+        ], [
             'tenant_id' => $defaultTenant->id,
             'first_name' => 'Admin',
             'last_name' => 'User',
@@ -81,7 +84,9 @@ class TenantSeeder extends Seeder
         ]);
 
         // Create Sample Hotspot Business Tenant
-        $hotspotTenant = Tenant::create([
+        $hotspotTenant = Tenant::updateOrCreate([
+            'slug' => 'coffee-house-wifi',
+        ], [
             'name' => 'Coffee House WiFi',
             'slug' => 'coffee-house-wifi',
             'country' => 'UG',
@@ -139,7 +144,9 @@ class TenantSeeder extends Seeder
         ]);
 
         // Create admin for hotspot tenant
-        User::create([
+        User::updateOrCreate([
+            'email' => 'admin@coffeehouse.ug',
+        ], [
             'tenant_id' => $hotspotTenant->id,
             'first_name' => 'Hotspot',
             'last_name' => 'Admin',
@@ -151,7 +158,9 @@ class TenantSeeder extends Seeder
         ]);
 
         // Create Sample ISP Tenant
-        $ispTenant = Tenant::create([
+        $ispTenant = Tenant::updateOrCreate([
+            'slug' => 'fastnet-broadband',
+        ], [
             'name' => 'FastNet Broadband',
             'slug' => 'fastnet-broadband',
             'country' => 'UG',
@@ -211,7 +220,9 @@ class TenantSeeder extends Seeder
         ]);
 
         // Create admin for ISP tenant
-        User::create([
+        User::updateOrCreate([
+            'email' => 'admin@fastnet.ug',
+        ], [
             'tenant_id' => $ispTenant->id,
             'first_name' => 'ISP',
             'last_name' => 'Admin',
@@ -223,7 +234,9 @@ class TenantSeeder extends Seeder
         ]);
 
         // Create a Suspended Tenant (for testing)
-        $suspendedTenant = Tenant::create([
+        Tenant::updateOrCreate([
+            'slug' => 'old-network',
+        ], [
             'name' => 'Old Network Services',
             'slug' => 'old-network',
             'country' => 'UG',
@@ -249,7 +262,9 @@ class TenantSeeder extends Seeder
 
         // Create Test Tenant for Development
         if (app()->environment(['local', 'development'])) {
-            $testTenant = Tenant::create([
+            $testTenant = Tenant::updateOrCreate([
+                'slug' => 'test-isp',
+            ], [
                 'name' => 'Test ISP Development',
                 'slug' => 'test-isp',
                 'country' => 'UG',
@@ -276,7 +291,9 @@ class TenantSeeder extends Seeder
             ]);
 
             // Create test user
-            User::create([
+            User::updateOrCreate([
+                'email' => 'test@test.com',
+            ], [
                 'tenant_id' => $testTenant->id,
                 'first_name' => 'Test',
                 'last_name' => 'User',
@@ -299,92 +316,5 @@ class TenantSeeder extends Seeder
                 app()->environment(['local', 'development']) ? ['Test ISP', 'test@test.com', 'password'] : null
             ]
         );
-    }
-}
-
-// Also create a Tenant Factory for testing
-// database/factories/TenantFactory.php
-namespace Database\Factories;
-
-use App\Models\Tenant;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
-
-class TenantFactory extends Factory
-{
-    protected $model = Tenant::class;
-
-    public function definition(): array
-    {
-        $name = fake()->company();
-
-        return [
-            'name' => $name,
-            'slug' => Str::slug($name),
-            'country' => fake()->randomElement(['UG', 'KE', 'TZ']),
-            'currency' => fake()->randomElement(['UGX', 'KES', 'TZS']),
-            'timezone' => 'Africa/Kampala',
-            'status' => 'active',
-            'branding' => [
-                'primary_color' => fake()->hexColor(),
-                'secondary_color' => fake()->hexColor(),
-                'logo_url' => null
-            ],
-            'tax_profile' => [
-                'tax_rate' => fake()->randomFloat(2, 0, 20),
-                'tax_number' => 'VAT-' . fake()->numerify('##########')
-            ],
-            'settings' => [
-                'business_type' => fake()->randomElement(['isp', 'hotspot', 'both']),
-                'setup_completed' => true,
-                'allow_self_registration' => fake()->boolean(),
-                'require_kyc' => fake()->boolean(),
-                'auto_suspend_days' => fake()->numberBetween(3, 30)
-            ]
-        ];
-    }
-
-    public function isp(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'settings' => array_merge($attributes['settings'], [
-                'business_type' => 'isp',
-                'primary_service_type' => 'pppoe'
-            ])
-        ]);
-    }
-
-    public function hotspot(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'settings' => array_merge($attributes['settings'], [
-                'business_type' => 'hotspot',
-                'primary_service_type' => 'hotspot'
-            ])
-        ]);
-    }
-
-    public function suspended(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'status' => 'suspended'
-        ]);
-    }
-}
-
-// Update DatabaseSeeder to include TenantSeeder
-// database/seeders/DatabaseSeeder.php
-namespace Database\Seeders;
-
-use Illuminate\Database\Seeder;
-
-class DatabaseSeeder extends Seeder
-{
-    public function run(): void
-    {
-        $this->call([
-            TenantSeeder::class,
-            // Add other seeders here
-        ]);
     }
 }

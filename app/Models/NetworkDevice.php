@@ -10,9 +10,23 @@ class NetworkDevice extends Model
     use HasFactory;
 
     protected $fillable = [
-        'tenant_id', 'name', 'nas_ip_address', 'secret', 'vendor', 'type',
-        'site_name', 'location', 'management', 'capabilities',
-        'is_active', 'last_seen_at'
+        'tenant_id',
+        'name',
+        'nas_ip_address',
+        'secret',
+        'vendor',
+        'type',
+        'site_name',
+        'location',
+        'management',
+        'capabilities',
+        'is_active',
+        'last_seen_at',
+
+        'api_username',
+        'api_password',
+        'api_port',
+        'api_ssl'
     ];
 
     protected $casts = [
@@ -24,7 +38,8 @@ class NetworkDevice extends Model
     ];
 
     protected $hidden = [
-        'secret'
+        'secret',
+        'api_password'
     ];
 
     public function tenant()

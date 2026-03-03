@@ -24,12 +24,12 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Livewire;
 
 // Public payment routes
-Route::get('/payment', [PaymentController::class, 'showPaymentPage'])->name('paymenthp.form');
-Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('paymenthp.process');
-Route::get('/payment/callback', [PaymentController::class, 'handleCallback'])->name('paymenthp.callback');
-Route::post('/payment/webhook', [PaymentController::class, 'webhook'])->name('paymenthp.webhook');
-Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('paymenthp.success');
-Route::get('/payment/failed', [PaymentController::class, 'paymentFailed'])->name('paymenthp.failed');
+// Route::get('/payment', [PaymentController::class, 'showPaymentPage'])->name('paymenthp.form');
+// Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('paymenthp.process');
+// Route::get('/payment/callback', [PaymentController::class, 'handleCallback'])->name('paymenthp.callback');
+// Route::post('/payment/webhook', [PaymentController::class, 'webhook'])->name('paymenthp.webhook');
+// Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('paymenthp.success');
+// Route::get('/payment/failed', [PaymentController::class, 'paymentFailed'])->name('paymenthp.failed');
 
 // Public routes (no middleware)
 Route::get('/', function () {

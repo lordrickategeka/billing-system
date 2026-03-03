@@ -13,7 +13,10 @@ use App\Models\Transaction;
 use App\Models\Customer;
 use App\Models\Voucher;
 use App\Models\AuditLog;
+use App\Models\NetworkDevice;
+use App\Services\MikrotikService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 class PaymentController extends Controller
 {
@@ -453,6 +456,7 @@ class PaymentController extends Controller
             $success = $this->flutterwave->handleWebhook($payload);
 
             if ($success) {
+                $this->provisionMikrotikUserFromWebhook($payload);
                 return response('OK', 200);
             } else {
                 return response('Bad Request', 400);
@@ -463,6 +467,84 @@ class PaymentController extends Controller
                 'payload' => $request->all()
             ]);
             return response('Internal Server Error', 500);
+        }
+    }
+
+    /**
+     * Provision or re-enable MikroTik hotspot user after successful payment webhook.
+     */
+    private function provisionMikrotikUserFromWebhook(array $payload): void
+    {
+        try {
+            if (($payload['event'] ?? null) !== 'charge.completed') {
+                return;
+            }
+
+            $paymentData = $payload['data'] ?? [];
+            if (($paymentData['status'] ?? null) !== 'successful') {
+                return;
+            }
+
+            $reference = $paymentData['tx_ref'] ?? null;
+            if (!$reference) {
+                return;
+            }
+
+            $transaction = Transaction::where('reference', $reference)->first();
+            if (!$transaction) {
+                Log::warning('Webhook provisioning skipped: transaction not found', ['reference' => $reference]);
+                return;
+            }
+
+            $voucher = null;
+            if (Schema::hasColumn('vouchers', 'transaction_id')) {
+                $voucher = Voucher::where('transaction_id', $transaction->id)->latest('id')->first();
+            }
+            $username = $voucher?->code ?: $reference;
+            $password = $voucher?->code ?: $reference;
+
+            $planKey = $voucher?->plan_type ?? $transaction->plan_type ?? null;
+            $plan = $planKey ? Plan::where('name', $planKey)->first() : null;
+
+            $deviceQuery = NetworkDevice::query()->where('is_active', true);
+            if (!empty($transaction->tenant_id)) {
+                $deviceQuery->where('tenant_id', $transaction->tenant_id);
+            }
+            $device = $deviceQuery->first();
+
+            if (!$device) {
+                Log::warning('Webhook provisioning skipped: no active MikroTik device', [
+                    'reference' => $reference,
+                    'tenant_id' => $transaction->tenant_id ?? null,
+                ]);
+                return;
+            }
+
+            $mikrotik = new MikrotikService($device);
+
+            if ($mikrotik->hotspotUserExists($username)) {
+                $mikrotik->enableUser($username);
+                $mikrotik->resetUserCounters($username);
+            } else {
+                $mikrotik->createHotspotUser(
+                    $username,
+                    $password,
+                    $plan?->mikrotik_profile ?? 'default',
+                    $plan->limit_uptime ?? ($plan->duration ?? null),
+                    $plan->limit_bytes ?? null
+                );
+            }
+
+            Log::info('Webhook provisioning completed on MikroTik', [
+                'reference' => $reference,
+                'username' => $username,
+                'device_id' => $device->id,
+            ]);
+        } catch (Exception $e) {
+            Log::error('Webhook provisioning failed', [
+                'error' => $e->getMessage(),
+                'payload' => $payload,
+            ]);
         }
     }
 

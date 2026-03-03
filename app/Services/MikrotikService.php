@@ -4,26 +4,51 @@ namespace App\Services;
 
 use RouterOS\Client;
 use RouterOS\Query;
+use App\Models\NetworkDevice;
+use Illuminate\Support\Facades\Log;
 
 class MikrotikService
 {
     protected $client;
+    protected NetworkDevice $device;
 
-    public function __construct()
+    public function __construct(NetworkDevice $device)
     {
+        $this->device = $device;
+
         $this->client = new Client([
-            'host' => env('MIKROTIK_HOST', '192.168.88.1'),
-            'user' => env('MIKROTIK_USER', 'admin'),
-            'pass' => env('MIKROTIK_PASS',  ''),
-            'port' => env('MIKROTIK_PORT', 8728),
-            'timeout' => 3,
+            'host' => $device->nas_ip_address,
+            'user' => $device->api_username,
+            'pass' => $device->api_password,
+            'port' => $device->api_port ?? 8728,
+            'ssl'  => $device->api_ssl ?? false,
+            'timeout' => 5,
         ]);
     }
 
-    public function createHotspotUser($username, $password, $profile, $limitUptime = null)
+    protected function execute(Query $query)
     {
+        try {
+            return $this->client->query($query)->read();
+        } catch (\Exception $e) {
+            Log::error('Mikrotik API Error: ' . $e->getMessage(), [
+                'device' => $this->device->id
+            ]);
+
+            return false;
+        }
+    }
+
+
+    public function createHotspotUser(
+        $username,
+        $password,
+        $profile,
+        $limitUptime = null,
+        $limitBytes = null
+    ) {
         $query = (new Query('/ip/hotspot/user/add'))
-           ->equal('name', $username)
+            ->equal('name', $username)
             ->equal('password', $password)
             ->equal('profile', $profile);
 
@@ -31,7 +56,19 @@ class MikrotikService
             $query->equal('limit-uptime', $limitUptime);
         }
 
-        return $this->client->query($query)->read();
+        if ($limitBytes) {
+            $query->equal('limit-bytes-total', $limitBytes);
+        }
+
+        return $this->execute($query);
+    }
+
+    public function resetUserCounters($username)
+    {
+        $query = (new Query('/ip/hotspot/user/reset-counters'))
+            ->equal('numbers', $username);
+
+        return $this->execute($query);
     }
 
     public function hotspotUserExists($username)
@@ -39,26 +76,66 @@ class MikrotikService
         $query = (new Query('/ip/hotspot/user/print'))
             ->where('name', $username);
 
-        $response = $this->client->query($query)->read();
+        $response = $this->execute($query);
 
-        return count($response) > 0;
+        return $response && count($response) > 0;
     }
 
     public function removeHotspotUser($username)
     {
-        // Get ID of user
-        $query = (new Query('/ip/hotspot/user/print'))->where('name', $username);
-        $result = $this->client->query($query)->read();
+        $query = (new Query('/ip/hotspot/user/print'))
+            ->where('name', $username);
 
-        if (count($result)) {
+        $result = $this->execute($query);
+
+        if ($result && count($result)) {
+
             $id = $result[0]['.id'];
 
             $removeQuery = (new Query('/ip/hotspot/user/remove'))
                 ->equal('.id', $id);
 
-            return $this->client->query($removeQuery)->read();
+            return $this->execute($removeQuery);
         }
 
         return false;
+    }
+
+    public function disconnectActiveSession($username)
+    {
+        $query = (new Query('/ip/hotspot/active/print'))
+            ->where('user', $username);
+
+        $active = $this->execute($query);
+
+        if ($active && count($active)) {
+
+            $id = $active[0]['.id'];
+
+            $removeQuery = (new Query('/ip/hotspot/active/remove'))
+                ->equal('.id', $id);
+
+            return $this->execute($removeQuery);
+        }
+
+        return false;
+    }
+
+    public function disableUser($username)
+    {
+        $query = (new Query('/ip/hotspot/user/set'))
+            ->equal('numbers', $username)
+            ->equal('disabled', 'yes');
+
+        return $this->execute($query);
+    }
+
+    public function enableUser($username)
+    {
+        $query = (new Query('/ip/hotspot/user/set'))
+            ->equal('numbers', $username)
+            ->equal('disabled', 'no');
+
+        return $this->execute($query);
     }
 }

@@ -15,9 +15,16 @@ class Subscription extends Model
         'status',       // active, suspended, expired
         'start_at',
         'end_at',
+        'expires_at',
+        'data_remaining',
     ];
 
-    protected $dates = ['start_at', 'end_at'];
+    protected $casts = [
+        'start_at' => 'datetime',
+        'end_at' => 'datetime',
+        'expires_at' => 'datetime',
+        'data_remaining' => 'integer',
+    ];
 
     public function customer()
     {

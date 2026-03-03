@@ -211,6 +211,6 @@ class NetworkManager extends Component
             'tenants' => Tenant::all(),
             'vendors' => ['mikrotik', 'cisco', 'ubiquiti', 'huawei', 'zte', 'generic'],
             'types' => ['access_point', 'bng', 'olt', 'switch', 'router']
-        ])->layout('layouts.app');
+        ]);
     }
 }
