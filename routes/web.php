@@ -35,9 +35,11 @@ use Livewire\Livewire;
 Route::get('/', function () {
     return view('tenant-registration');
 })->name('tenants.create');
+
 Route::get('/home', function () {
     return view('tenant-registration');
 })->name('home');
+
 Route::get('/register', function () {
     return view('tenant-registration');
 })->name('register');

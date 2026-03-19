@@ -21,7 +21,7 @@
                         </svg>
                     </div>
                     <div class="ml-3">
-                        <h1 class="text-2xl font-bold text-gray-900">BILLIT</h1>
+                        <h1 class="text-2xl font-bold text-gray-900">BILL-IT</h1>
                         <p class="text-sm text-orange-500 font-medium">Digitalizing Tech</p>
                     </div>
                 </div>
@@ -114,7 +114,7 @@
 
         <!-- Footer -->
         <div class="mt-8 text-center">
-            <p class="text-sm text-gray-500">&copy; {{ date('Y') }} BASH Digitalizing Tech. All rights reserved.</p>
+            <p class="text-sm text-gray-500">&copy; {{ date('Y') }} BILL-IT Digitalizing Tech. All rights reserved.</p>
         </div>
     </div>
 </body>
